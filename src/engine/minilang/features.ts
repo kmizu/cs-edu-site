@@ -9,30 +9,53 @@ export interface LanguageFeatures {
   mul: boolean;
   /** かっこ（レッスン4で解放） */
   paren: boolean;
-  /** 変数（v1では未使用。レッスン6で解放予定） */
+  /** 変数（レッスン6で解放） */
   variables: boolean;
+  /** 比較と if/else（レッスン8で解放） */
+  conditionals: boolean;
+  /** while（レッスン9で解放） */
+  loops: boolean;
+  /** 関数（レッスン10で解放） */
+  functions: boolean;
 }
 
-/** レッスン2：数しか話せない言語 */
-export const STAGE_NUMBER: LanguageFeatures = {
+const OFF = {
   add: false,
   mul: false,
   paren: false,
   variables: false,
-};
+  conditionals: false,
+  loops: false,
+  functions: false,
+} satisfies LanguageFeatures;
+
+/** レッスン2：数しか話せない言語 */
+export const STAGE_NUMBER: LanguageFeatures = { ...OFF };
 
 /** レッスン3：たし算の木 */
-export const STAGE_ADD: LanguageFeatures = { add: true, mul: false, paren: false, variables: false };
+export const STAGE_ADD: LanguageFeatures = { ...OFF, add: true };
 
 /** レッスン4：優先順位とかっこ（電卓の完成） */
-export const STAGE_CALC: LanguageFeatures = { add: true, mul: true, paren: true, variables: false };
+export const STAGE_CALC: LanguageFeatures = { ...OFF, add: true, mul: true, paren: true };
 
-/** レッスン6以降：変数 */
-export const STAGE_VAR: LanguageFeatures = { add: true, mul: true, paren: true, variables: true };
+/** レッスン6：名前をおぼえる言語 */
+export const STAGE_VAR: LanguageFeatures = { ...STAGE_CALC, variables: true };
+
+/** レッスン8：「ほんとう」を決める */
+export const STAGE_BOOL: LanguageFeatures = { ...STAGE_VAR, conditionals: true };
+
+/** レッスン9：くりかえしと、止まらない機械 */
+export const STAGE_LOOP: LanguageFeatures = { ...STAGE_BOOL, loops: true };
+
+/** レッスン10以降：ことばを定義できる言語（全機能） */
+export const STAGE_FUNC: LanguageFeatures = { ...STAGE_LOOP, functions: true };
 
 export const STAGES: Record<string, LanguageFeatures> = {
   number: STAGE_NUMBER,
   add: STAGE_ADD,
   calc: STAGE_CALC,
   var: STAGE_VAR,
+  bool: STAGE_BOOL,
+  loop: STAGE_LOOP,
+  func: STAGE_FUNC,
 };

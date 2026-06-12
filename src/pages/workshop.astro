@@ -1,0 +1,109 @@
+---
+import Workshop from '../components/islands/Workshop';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { withBase } from '../utils/url';
+---
+
+<BaseLayout
+  title="ことばの工房"
+  description="自分のプログラミング言語を組み立てて、URLにして共有できる工房。言語はリンクそのものに棲む。"
+>
+  <main class="container">
+    <header class="ws-header">
+      <p class="leaf-rule">ことばの工房</p>
+      <h1>言語は、設計するもの。</h1>
+      <p class="ws-lead">
+        キーワードを差し替えて、あなたの言語を組み立ててください。できあがった言語は、リンクそのものに符号化されます。サーバはありません。<a
+          href={withBase('/courses/tsukuru/')}>コース2</a
+        >を歩いてからだと、ここの全部が分かります。
+      </p>
+    </header>
+    <Workshop client:load />
+  </main>
+</BaseLayout>
+
+<style>
+  .ws-header {
+    padding-block: var(--space-6) var(--space-4);
+    max-width: var(--measure);
+  }
+
+  .ws-lead {
+    color: var(--c-ink-2);
+    margin-top: var(--space-2);
+    line-height: 2;
+  }
+</style>
+
+<style is:global>
+  .workshop {
+    max-width: 50rem;
+    padding-bottom: var(--space-6);
+  }
+
+  .workshop-loaded {
+    border: 1px solid color-mix(in srgb, var(--c-moss) 40%, transparent);
+    background: var(--c-moss-soft);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    line-height: 1.9;
+  }
+
+  .workshop-meta {
+    display: grid;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+
+  .workshop-name input,
+  .minilab-kw input {
+    font-family: var(--font-code);
+    font-size: 16px;
+    color: var(--c-ink);
+    background: var(--c-editor-bg);
+    border: 1px solid var(--c-line-strong);
+    border-radius: var(--radius-md);
+    padding: 0.4em 0.7em;
+    width: 100%;
+  }
+
+  .minilab-kw-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    gap: var(--space-2);
+  }
+
+  .minilab-kw span {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--c-ink-3);
+    margin-bottom: 0.2em;
+  }
+
+  .minilab-keywords {
+    margin-bottom: var(--space-2);
+  }
+
+  .minilab-value.is-bool {
+    color: var(--c-mizu);
+    background: color-mix(in srgb, var(--c-mizu) 12%, transparent);
+    border-color: color-mix(in srgb, var(--c-mizu) 35%, transparent);
+  }
+
+  .workshop-share {
+    margin-top: var(--space-4);
+  }
+
+  .workshop-url {
+    margin-top: var(--space-3);
+    font-size: 0.85rem;
+    color: var(--c-ink-2);
+    word-break: break-all;
+  }
+
+  .workshop-url code {
+    display: block;
+    margin-top: var(--space-1);
+    padding: var(--space-2);
+  }
+</style>

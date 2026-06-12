@@ -1,5 +1,5 @@
 import type { Expr, Ident, Program, Stmt } from './ast';
-import { err, type NiwaError, type Result } from './errors';
+import type { NiwaError, Result } from './errors';
 import type { Span, Token } from './token';
 import { tokenize } from './tokenizer';
 
