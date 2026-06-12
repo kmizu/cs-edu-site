@@ -23,3 +23,8 @@ test-results/
 .idea/
 *.swp
 .DS_Store
+
+# Windows/Chrome temp profiles (e.g. lighthouse runs)
+C:*
+"C:*
+lighthouse.*/
