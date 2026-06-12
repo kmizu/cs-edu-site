@@ -20,10 +20,12 @@
     "@astrojs/sitemap": "^3.6.0",
     "@codemirror/autocomplete": "^6.18.0",
     "@codemirror/commands": "^6.8.0",
+    "@codemirror/lang-javascript": "^6.2.5",
     "@codemirror/language": "^6.11.0",
     "@codemirror/lint": "^6.8.0",
     "@codemirror/state": "^6.5.0",
     "@codemirror/view": "^6.36.0",
+    "@lezer/highlight": "^1.2.3",
     "@nanostores/preact": "^1.0.0",
     "astro": "^6.4.6",
     "astro-expressive-code": "^0.43.1",
@@ -38,6 +40,7 @@
     ]
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.9",
     "@playwright/test": "^1.60.0",
     "@vitest/coverage-v8": "^4.1.8",
     "prettier": "^3.5.0",

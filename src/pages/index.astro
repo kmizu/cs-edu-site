@@ -1,31 +1,319 @@
 ---
+import NiwaRunner from '../components/islands/NiwaRunner';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { withBase } from '../utils/url';
+
+const heroCode = 'まる を かく';
 ---
 
 <BaseLayout title="言語の庭">
-  <main class="container">
-    <section class="hero">
-      <p class="leaf-rule rise rise-1">ことばを育てて、言語をつくる</p>
-      <h1 class="rise rise-2">コードは、ことばだ。</h1>
-      <p class="hero-lead prose rise rise-3">
-        ここは、プログラミングを「ことば」として学ぶ庭です。
-        いまは開園の準備をしています。もうすぐ、最初のひと言が芽を出します。
-      </p>
-      <a class="btn btn-primary rise rise-4" href={withBase('/courses/')}>庭の地図を見る →</a>
+  <main>
+    <!-- ファーストビュー：説明より先に、ボタン -->
+    <section class="hero container">
+      <div class="hero-text">
+        <p class="leaf-rule rise rise-1">ことばを育てて、言語をつくる</p>
+        <h1 class="rise rise-2">コードは、<br class="sp-only" />ことばだ。</h1>
+        <p class="hero-lead rise rise-3">
+          下の「実行する」を押してください。<br />
+          それだけで、始まります。
+        </p>
+      </div>
+      <div class="hero-runner rise rise-4">
+        <NiwaRunner client:load initialCode={heroCode} canvasHeight={260} storageKey="top-hero" />
+        <p class="hero-prompt">
+          うまくいったら、<code>まる</code> を <code>さんかく</code> や <code>ほし</code>
+          に変えて、もう一度押してみてください。
+        </p>
+      </div>
+      <div class="hero-cta rise rise-4">
+        <a class="btn btn-primary" href={withBase('/courses/kotoba/01/')}>ここから、はじめる</a>
+        <a class="btn btn-ghost" href={withBase('/courses/')}>庭の地図を見る</a>
+      </div>
+    </section>
+
+    <!-- 3つの約束 -->
+    <section class="promises">
+      <div class="container">
+        <ul class="promise-list">
+          <li>
+            <h2>登録不要、ずっと無料</h2>
+            <p>アカウントも、メールアドレスも、お金もいりません。ブラウザがあれば、それで全部です。</p>
+          </li>
+          <li>
+            <h2>文系も、理系もない</h2>
+            <p>
+              ここではプログラミングを「ことば」として学びます。日本語を読み書きできるあなたは、すでに言語の使い手です。
+            </p>
+          </li>
+          <li>
+            <h2>最後は、自分の言語をつくる</h2>
+            <p>
+              この庭のゴールは、あなたが自分のプログラミング言語を設計することです。本気です。
+            </p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- コース -->
+    <section class="courses container">
+      <p class="leaf-rule">庭の小道</p>
+      <h2 class="section-title">ふたつのコースと、その先</h2>
+      <div class="course-cards">
+        <a class="course-card" href={withBase('/courses/kotoba/')}>
+          <span class="course-no">コース 1</span>
+          <h3>ことばとしてのプログラミング</h3>
+          <p>
+            コンピュータという「世界一誠実な読み手」と、ことばを交わすところから。プログラミングの経験はいりません。
+          </p>
+          <span class="course-meta">全10レッスン ・ 経験ゼロから</span>
+        </a>
+        <a class="course-card" href={withBase('/courses/tsukuru/')}>
+          <span class="course-no">コース 2</span>
+          <h3>じぶんの言語をつくる</h3>
+          <p>
+            電卓から始めて、変数、分岐、そして自分だけの文法へ。言語は与えられるものではなく、設計するものだと知る。
+          </p>
+          <span class="course-meta">全12レッスン ・ コース1のつづき</span>
+        </a>
+        <div class="course-card course-card-soon" aria-hidden="true">
+          <span class="course-no">まだ芽が出ていない区画</span>
+          <h3>正規表現 ／ アルゴリズムのかたち ／ 計算できるとは何か</h3>
+          <p>庭は、すこしずつ広がります。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 思想 -->
+    <section class="philosophy">
+      <div class="container philosophy-inner">
+        <span class="tategaki philosophy-label" aria-hidden="true">この庭の考え</span>
+        <div class="prose">
+          <h2>「変数は箱」とは、教えません。</h2>
+          <p>
+            プログラミングは、数学が得意な人のための技能ではありません。文法があり、名前があり、意味がある——それは、あなたが毎日使っている日本語と同じ、ことばの営みです。
+          </p>
+          <p>
+            だからこの庭では、たとえ話で分かった気にさせるのではなく、ことばの感覚から本当の仕組みまで、まっすぐ連れていきます。途中でつまずく場所も、正直に予告します。
+          </p>
+          <p class="philosophy-sign">
+            — 構文解析を専門とする博士（工学）が、ひとつひとつ書いています。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq container">
+      <p class="leaf-rule">よくある質問</p>
+      <dl class="faq-list">
+        <div>
+          <dt>本当に無料ですか？</dt>
+          <dd>
+            無料です。広告もありません。この庭はオープンソースで、教材はすべて公開されています。
+          </dd>
+        </div>
+        <div>
+          <dt>対象年齢はありますか？</dt>
+          <dd>
+            ひらがなと「かけ算」が分かれば歩けるように作っていますが、大人の方にこそ歩いてほしい庭です。
+          </dd>
+        </div>
+        <div>
+          <dt>何を用意すればいいですか？</dt>
+          <dd>ブラウザだけです。インストールも、登録も、いりません。スマホでも歩けます。</dd>
+        </div>
+      </dl>
     </section>
   </main>
 </BaseLayout>
 
 <style>
   .hero {
-    padding-block: var(--space-7) var(--space-6);
-    max-width: var(--measure);
+    padding-block: var(--space-6) var(--space-5);
+    display: grid;
+    gap: var(--space-4);
+    max-width: 46rem;
   }
 
   .hero-lead {
-    margin-block: var(--space-4) var(--space-5);
     color: var(--c-ink-2);
     font-size: 1.05rem;
+    margin: var(--space-3) 0 0;
+  }
+
+  .hero-prompt {
+    color: var(--c-ink-2);
+    font-size: 0.95rem;
+    margin: var(--space-2) 0 0;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+
+  .sp-only {
+    display: none;
+  }
+
+  @media (max-width: 480px) {
+    .sp-only {
+      display: inline;
+    }
+  }
+
+  .promises {
+    background: var(--c-paper-2);
+    border-block: 1px solid var(--c-line);
+    padding-block: var(--space-6);
+  }
+
+  .promise-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: var(--space-5);
+  }
+
+  .promise-list h2 {
+    font-size: 1.15rem;
+    margin-bottom: var(--space-2);
+  }
+
+  .promise-list p {
+    color: var(--c-ink-2);
+    font-size: 0.95rem;
+    margin: 0;
+    line-height: 1.9;
+  }
+
+  .courses {
+    padding-block: var(--space-6);
+  }
+
+  .section-title {
+    margin-block: var(--space-2) var(--space-5);
+  }
+
+  .course-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    gap: var(--space-4);
+  }
+
+  .course-card {
+    display: block;
+    border: 1px solid var(--c-line-strong);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    background: var(--c-paper);
+    text-decoration: none;
+    color: var(--c-ink);
+    box-shadow: var(--shadow-card);
+    transition:
+      transform var(--dur-fast) var(--ease-out),
+      box-shadow var(--dur-fast) var(--ease-out);
+  }
+
+  .course-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lift);
+  }
+
+  .course-no {
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    letter-spacing: var(--tracking-wide);
+    color: var(--c-moss);
+  }
+
+  .course-card h3 {
+    margin-block: var(--space-2);
+  }
+
+  .course-card p {
+    color: var(--c-ink-2);
+    font-size: 0.92rem;
+    line-height: 1.9;
+    margin: 0 0 var(--space-3);
+  }
+
+  .course-meta {
+    font-size: 0.8rem;
+    color: var(--c-ink-3);
+  }
+
+  .course-card-soon {
+    border-style: dashed;
+    box-shadow: none;
+    opacity: 0.7;
+  }
+
+  .philosophy {
+    background: var(--c-paper-2);
+    border-block: 1px solid var(--c-line);
+    padding-block: var(--space-6);
+  }
+
+  .philosophy-inner {
+    display: flex;
+    gap: var(--space-5);
+    align-items: flex-start;
+  }
+
+  .philosophy-label {
+    color: var(--c-moss);
+    font-size: 0.9rem;
+    border-right: 1px solid var(--c-line-strong);
+    padding-right: var(--space-2);
+    min-height: 9em;
+  }
+
+  .philosophy h2 {
+    margin-bottom: var(--space-3);
+  }
+
+  .philosophy p {
+    color: var(--c-ink-2);
+    line-height: 2.1;
+  }
+
+  .philosophy-sign {
+    font-size: 0.9rem;
+    color: var(--c-ink-3);
+  }
+
+  @media (max-width: 640px) {
+    .philosophy-label {
+      display: none;
+    }
+  }
+
+  .faq {
+    padding-block: var(--space-6) var(--space-4);
+  }
+
+  .faq-list {
+    margin: var(--space-4) 0 0;
+    display: grid;
+    gap: var(--space-4);
+    max-width: var(--measure);
+  }
+
+  .faq-list dt {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin-bottom: var(--space-1);
+  }
+
+  .faq-list dd {
+    margin: 0;
+    color: var(--c-ink-2);
+    line-height: 1.9;
   }
 </style>

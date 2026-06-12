@@ -1,0 +1,133 @@
+/* ============================================================
+   構文木ビュー & トークン表示
+   ============================================================ */
+
+.astviewer {
+  border: 1px solid var(--c-line-strong);
+  border-radius: var(--radius-lg);
+  background: var(--c-paper);
+  box-shadow: var(--shadow-card);
+  margin-block: var(--space-4);
+  padding: var(--space-4);
+  display: grid;
+  gap: var(--space-4);
+}
+
+.astviewer-label {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  letter-spacing: var(--tracking-wide);
+  color: var(--c-moss);
+  margin-bottom: var(--space-2);
+}
+
+.astviewer textarea {
+  width: 100%;
+  font-family: var(--font-code);
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--c-ink);
+  background: var(--c-editor-bg);
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  resize: vertical;
+}
+
+.astviewer-error {
+  margin: 0;
+  color: var(--c-ink-2);
+  font-size: 0.92rem;
+}
+
+/* ---------- トークンの粒 ---------- */
+
+.token-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.token-pill {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid var(--c-line-strong);
+  border-radius: var(--radius-md);
+  padding: 0.25em 0.7em;
+  background: var(--c-paper-2);
+}
+
+.token-text {
+  font-family: var(--font-code);
+  font-size: 0.95rem;
+}
+
+.token-kind {
+  font-size: 0.65rem;
+  color: var(--c-ink-3);
+}
+
+.token-keyword .token-text {
+  color: var(--c-moss);
+  font-weight: 600;
+}
+.token-particle .token-text {
+  color: var(--c-ink-3);
+}
+.token-number .token-text {
+  color: var(--c-mizu);
+}
+.token-string .token-text {
+  color: var(--c-aka);
+}
+
+/* ---------- 木 ---------- */
+
+.tree-root,
+.tree-children {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tree-children {
+  margin-left: 1.1rem;
+  border-left: 1px solid var(--c-line-strong);
+  padding-left: var(--space-3);
+}
+
+.tree-node {
+  position: relative;
+  padding-block: 0.15rem;
+}
+
+.tree-children .tree-node::before {
+  content: '';
+  position: absolute;
+  left: calc(-1 * var(--space-3));
+  top: 1em;
+  width: calc(var(--space-3) - 6px);
+  height: 1px;
+  background: var(--c-line-strong);
+}
+
+.tree-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  font-family: var(--font-code);
+  font-size: 0.95rem;
+}
+
+.tree-chip {
+  font-size: 0.65rem;
+  font-family: var(--font-body);
+  color: var(--c-moss);
+  border: 1px solid color-mix(in srgb, var(--c-moss) 40%, transparent);
+  border-radius: 999px;
+  padding: 0 0.6em;
+  background: var(--c-moss-soft);
+  white-space: nowrap;
+}
