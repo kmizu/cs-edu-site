@@ -154,6 +154,20 @@
   color: var(--c-aka);
 }
 
+.runner-error-reading {
+  margin: var(--space-2) 0 0;
+  color: var(--c-ink);
+  line-height: 1.7;
+}
+
+.console-warn {
+  color: #d9a521;
+}
+
+.console-error {
+  color: #e08767;
+}
+
 .runner-error-hint {
   margin: var(--space-2) 0 0;
   color: var(--c-ink-2);
