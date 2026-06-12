@@ -24,6 +24,8 @@ const WINDOW = 8;
 
 const MOVE_LABELS: Record<Rule['move'], string> = { L: '←左へ', R: '→右へ', N: '・そのまま' };
 
+const FIELD_LABELS = { state: '状態', read: '読む記号', write: '書く記号' } as const;
+
 /**
  * コース5の実験室。紙テープ・ヘッド・遷移表——
  * 計算する機械の、いちばん素朴なかたちを1歩ずつ動かす。
@@ -127,7 +129,11 @@ export default function TuringLab({ program, input, editable = false, fuel = 300
               <th>書く</th>
               <th>動く</th>
               <th>次の状態</th>
-              {editable && <th></th>}
+              {editable && (
+                <th>
+                  <span class="sr-only">この行を消す</span>
+                </th>
+              )}
             </tr>
           </thead>
           <tbody>
@@ -142,6 +148,7 @@ export default function TuringLab({ program, input, editable = false, fuel = 300
                           <input
                             type="text"
                             value={r[field]}
+                            aria-label={`${i + 1}行目の${FIELD_LABELS[field]}`}
                             onChange={(e) => {
                               const v = (e.target as HTMLInputElement).value || BLANK;
                               setRules(rules.map((x, j) => (j === i ? { ...x, [field]: v } : x)));
@@ -153,6 +160,7 @@ export default function TuringLab({ program, input, editable = false, fuel = 300
                       <td>
                         <select
                           value={r.move}
+                          aria-label={`${i + 1}行目の動き`}
                           onChange={(e) => {
                             const v = (e.target as HTMLSelectElement).value as Rule['move'];
                             setRules(rules.map((x, j) => (j === i ? { ...x, move: v } : x)));
@@ -170,6 +178,7 @@ export default function TuringLab({ program, input, editable = false, fuel = 300
                         <input
                           type="text"
                           value={r.next}
+                          aria-label={`${i + 1}行目の次の状態`}
                           onChange={(e) => {
                             const v = (e.target as HTMLInputElement).value || r.next;
                             setRules(rules.map((x, j) => (j === i ? { ...x, next: v } : x)));

@@ -341,11 +341,23 @@
   font-family: var(--font-code);
   font-size: 1.05rem;
   font-weight: 600;
-  color: var(--c-mizu);
+  color: color-mix(in srgb, var(--c-mizu) 72%, var(--c-ink));
   background: color-mix(in srgb, var(--c-mizu) 12%, transparent);
   border: 1px solid color-mix(in srgb, var(--c-mizu) 35%, transparent);
   border-radius: var(--radius-md);
   padding: 0.15em 0.7em;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .turinglab-statename.is-halted {
@@ -517,7 +529,7 @@
 }
 
 .minilab-typename {
-  color: var(--c-mizu);
+  color: color-mix(in srgb, var(--c-mizu) 72%, var(--c-ink));
   font-size: 0.82rem;
 }
 
