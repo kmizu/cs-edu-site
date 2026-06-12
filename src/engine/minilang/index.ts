@@ -6,6 +6,8 @@
 export type { CmpOp, MiniExpr, MiniProgram, MiniStmt } from './ast';
 export type { MiniRunResult, MiniValue } from './evaluator';
 export { runMini } from './evaluator';
+export type { CheckResult, MiniType, TypeBinding } from './checker';
+export { checkMini, checkTypes, typeName } from './checker';
 export type { LanguageFeatures } from './features';
 export {
   STAGE_ADD,
@@ -14,6 +16,7 @@ export {
   STAGE_FUNC,
   STAGE_LOOP,
   STAGE_NUMBER,
+  STAGE_TYPE,
   STAGE_VAR,
   STAGES,
 } from './features';

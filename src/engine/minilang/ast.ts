@@ -14,7 +14,15 @@ export type MiniStmt =
   | { type: 'assign'; name: string; value: MiniExpr; span: Span }
   | { type: 'if'; cond: MiniExpr; then: MiniStmt[]; else?: MiniStmt[]; span: Span }
   | { type: 'while'; cond: MiniExpr; body: MiniStmt[]; span: Span }
-  | { type: 'fn'; name: string; params: string[]; body: MiniStmt[]; span: Span };
+  | {
+      type: 'fn';
+      name: string;
+      params: string[];
+      /** 型注釈（STAGE_TYPEのみ）。params と同じ並びで、未注釈は undefined */
+      paramTypes?: (string | undefined)[];
+      body: MiniStmt[];
+      span: Span;
+    };
 
 export interface MiniProgram {
   type: 'program';

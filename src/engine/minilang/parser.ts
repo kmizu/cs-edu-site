@@ -131,12 +131,33 @@ class MiniParser {
     }
     this.next();
     const params: string[] = [];
+    const paramTypes: (string | undefined)[] = [];
     if (this.peek().kind !== 'rparen') {
       for (;;) {
         const p = this.peek();
         if (p.kind !== 'ident') fail('引数の名前が読めませんでした。', p.span);
         params.push(p.text);
         this.next();
+        // 型注釈: x: 数
+        if (this.peek().kind === 'colon') {
+          const colon = this.peek();
+          if (!this.features.types) {
+            fail(
+              'この章では、まだ「型の注釈」は登場していません。',
+              colon.span,
+              '型は、コース6で言語に教えます。',
+            );
+          }
+          this.next();
+          const ty = this.peek();
+          if (ty.kind !== 'ident') {
+            fail('「:」のあとには型の名前が来ます。', ty.span, `例：${p.text}: 数`);
+          }
+          this.next();
+          paramTypes.push(ty.text);
+        } else {
+          paramTypes.push(undefined);
+        }
         if (this.peek().kind === 'comma') {
           this.next();
           continue;
@@ -153,6 +174,7 @@ class MiniParser {
       type: 'fn',
       name: nameTok.text,
       params,
+      ...(this.features.types ? { paramTypes } : {}),
       body: body.stmts,
       span: { start: fnTok.span.start, end: body.end },
     };

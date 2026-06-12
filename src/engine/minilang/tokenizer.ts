@@ -11,6 +11,7 @@ export type MiniTokenKind =
   | 'lbrace'
   | 'rbrace'
   | 'comma'
+  | 'colon' // : 型注釈（STAGE_TYPEで使用）
   | 'ident'
   | 'keyword' // if / else / while / fn（表記はKeywordMapで差し替え可能）
   | 'eq' // =
@@ -114,6 +115,11 @@ export function tokenizeMini(
     if (ch === ',' || ch === '、') {
       const start = i++;
       push('comma', ',', { start, end: i });
+      continue;
+    }
+    if (ch === ':' || ch === '：') {
+      const start = i++;
+      push('colon', ':', { start, end: i });
       continue;
     }
 

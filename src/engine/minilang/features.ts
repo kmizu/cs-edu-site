@@ -17,6 +17,8 @@ export interface LanguageFeatures {
   loops: boolean;
   /** 関数（レッスン10で解放） */
   functions: boolean;
+  /** 型注釈 fn f(x: 数)（コース6で解放） */
+  types: boolean;
 }
 
 const OFF = {
@@ -27,6 +29,7 @@ const OFF = {
   conditionals: false,
   loops: false,
   functions: false,
+  types: false,
 } satisfies LanguageFeatures;
 
 /** レッスン2：数しか話せない言語 */
@@ -50,6 +53,9 @@ export const STAGE_LOOP: LanguageFeatures = { ...STAGE_BOOL, loops: true };
 /** レッスン10以降：ことばを定義できる言語（全機能） */
 export const STAGE_FUNC: LanguageFeatures = { ...STAGE_LOOP, functions: true };
 
+/** コース6：型注釈を書ける言語 */
+export const STAGE_TYPE: LanguageFeatures = { ...STAGE_FUNC, types: true };
+
 export const STAGES: Record<string, LanguageFeatures> = {
   number: STAGE_NUMBER,
   add: STAGE_ADD,
@@ -58,4 +64,5 @@ export const STAGES: Record<string, LanguageFeatures> = {
   bool: STAGE_BOOL,
   loop: STAGE_LOOP,
   func: STAGE_FUNC,
+  type: STAGE_TYPE,
 };

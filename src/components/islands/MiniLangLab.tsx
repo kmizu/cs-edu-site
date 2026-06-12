@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'preact/hooks';
 import {
+  checkTypes,
   DEFAULT_KEYWORDS,
   parseMini,
   runMini,
@@ -13,13 +14,15 @@ import TreeView from './TreeView';
 
 interface Props {
   initialCode: string;
-  /** 言語の成長段階: number | add | calc | var | bool | loop | func */
+  /** 言語の成長段階: number | add | calc | var | bool | loop | func | type */
   stage: string;
   showTokens?: boolean;
   showTree?: boolean;
   /** キーワード表を編集できるようにする（レッスン11「文法は、きみが決める」用） */
   editableKeywords?: boolean;
   keywords?: KeywordMap;
+  /** 「型の目」パネル（コース6用）。実行の前に型検査の結果を見せる */
+  checkTypes?: boolean;
 }
 
 const KIND_LABELS: Record<string, string> = {
@@ -54,6 +57,7 @@ export default function MiniLangLab({
   showTree = true,
   editableKeywords = false,
   keywords: initialKeywords,
+  checkTypes: showTypeCheck = false,
 }: Props) {
   const [code, setCode] = useState(initialCode);
   const [keywords, setKeywords] = useState<KeywordMap>(initialKeywords ?? DEFAULT_KEYWORDS);
@@ -61,6 +65,11 @@ export default function MiniLangLab({
 
   const tokens = useMemo(() => tokenizeMini(code, keywords), [code, keywords]);
   const parsed = useMemo(() => parseMini(code, features, keywords), [code, features, keywords]);
+  const typeCheck = useMemo(
+    () => (showTypeCheck && parsed.ok ? checkTypes(parsed.program) : undefined),
+    [showTypeCheck, parsed],
+  );
+  const typesOk = !showTypeCheck || (typeCheck?.ok ?? false);
   const result = useMemo(() => runMini(code, features, keywords), [code, features, keywords]);
 
   return (
@@ -125,9 +134,39 @@ export default function MiniLangLab({
         </div>
       )}
 
+      {showTypeCheck && (
+        <div class="minilab-typecheck">
+          <span class="astviewer-label">型の目（実行する前の検査）</span>
+          {!parsed.ok ? (
+            <p class="minilab-error">（まだ木になっていないので、型はこれから）</p>
+          ) : typeCheck?.ok ? (
+            <div>
+              <p class="minilab-types-ok">型のまちがいは、見つかりませんでした。</p>
+              {typeCheck.bindings.length > 0 && (
+                <div class="minilab-types">
+                  {typeCheck.bindings.map((b) => (
+                    <span key={b.name} class="minilab-typebind">
+                      <code>{b.name}</code>
+                      <span class="minilab-typename">{b.type}</span>
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            <p class="minilab-error minilab-typeerror">
+              {typeCheck?.error.message}
+              {typeCheck?.error.hint && <span class="minilab-hint">{typeCheck.error.hint}</span>}
+            </p>
+          )}
+        </div>
+      )}
+
       <div class="minilab-result">
-        <span class="astviewer-label">③ 評価された値</span>
-        {result.ok ? (
+        <span class="astviewer-label">{showTypeCheck ? '評価された値' : '③ 評価された値'}</span>
+        {!typesOk && parsed.ok ? (
+          <p class="minilab-error">（型の目が止めたので、実行していません）</p>
+        ) : result.ok ? (
           result.values.length > 0 ? (
             <div class="minilab-values">
               {result.values.map((v, i) => (
