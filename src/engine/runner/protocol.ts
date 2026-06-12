@@ -8,6 +8,7 @@ export type ConsoleLevel = 'log' | 'warn' | 'error' | 'info';
 export type HostToWorker = { type: 'run'; id: number; code: string };
 
 export type WorkerToHost =
+  | { type: 'ready' } // Worker起動完了（タイムアウト計測はここから後で行う）
   | { type: 'console'; id: number; level: ConsoleLevel; text: string }
   | { type: 'done'; id: number; durationMs: number }
   | {

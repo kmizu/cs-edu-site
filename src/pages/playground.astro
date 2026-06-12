@@ -1,0 +1,110 @@
+---
+import Playground from '../components/islands/Playground';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="あそびば"
+  description="にわ語とJavaScriptを、自由に書いて実行できる場所。書いたコードはブラウザに残ります。"
+>
+  <main class="container">
+    <header class="pg-header">
+      <p class="leaf-rule">あそびば</p>
+      <h1>ここは、自由帳です。</h1>
+      <p class="pg-lead">
+        課題も正解もありません。書いたコードは、このブラウザにそっと残ります。
+      </p>
+    </header>
+    <Playground client:load />
+
+    <section class="pg-cheatsheet">
+      <h2>にわ語の早見表</h2>
+      <div class="cheat-grid">
+        <div>
+          <h3>かたちを かく</h3>
+          <p><code>まる を かく</code>（さんかく・しかく・ほし も）</p>
+          <p><code>50 すすむ</code> ／ <code>みぎ へ 90 まわる</code></p>
+        </div>
+        <div>
+          <h3>見た目を変える</h3>
+          <p><code>いろ を あか にする</code></p>
+          <p><code>おおきさ を 40 にする</code> ／ <code>ふとさ を 6 にする</code></p>
+          <p>色：あか だいだい き みどり そら あお むらさき もも ちゃ くろ しろ はい</p>
+        </div>
+        <div>
+          <h3>ことばの道具</h3>
+          <p><code>90 を かくど とよぶ</code>（名づけ）</p>
+          <p><code>6 かい くりかえす {'{ … }'}</code></p>
+          <p><code>もし x が 3 より おおきい ならば {'{ … }'} ちがえば {'{ … }'}</code></p>
+          <p><code>はなびら とは {'{ … }'}</code>（語の定義）</p>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .pg-header {
+    padding-block: var(--space-5) var(--space-3);
+    max-width: var(--measure);
+  }
+
+  .pg-lead {
+    color: var(--c-ink-2);
+    margin-top: var(--space-2);
+  }
+
+  .pg-cheatsheet {
+    margin-block: var(--space-6);
+  }
+
+  .pg-cheatsheet h2 {
+    margin-bottom: var(--space-4);
+  }
+
+  .cheat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: var(--space-4);
+    font-size: 0.92rem;
+  }
+
+  .cheat-grid h3 {
+    font-size: 1rem;
+    margin-bottom: var(--space-2);
+    color: var(--c-moss);
+  }
+
+  .cheat-grid p {
+    margin-bottom: 0.5em;
+    line-height: 1.9;
+    color: var(--c-ink-2);
+  }
+</style>
+
+<style is:global>
+  .playground-tabs {
+    display: flex;
+    gap: var(--space-2);
+    margin-bottom: calc(-1 * var(--space-3));
+  }
+
+  .playground-tabs button {
+    background: var(--c-paper-2);
+    border: 1px solid var(--c-line-strong);
+    border-bottom: none;
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    padding: 0.5em 1.4em;
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    letter-spacing: var(--tracking-display);
+    color: var(--c-ink-3);
+    cursor: pointer;
+  }
+
+  .playground-tabs button.is-active {
+    background: var(--c-editor-bg);
+    color: var(--c-moss);
+    font-weight: 600;
+  }
+</style>

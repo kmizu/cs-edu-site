@@ -1,0 +1,89 @@
+---
+import Garden from '../components/islands/Garden';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="あなたの庭"
+  description="歩いたぶんだけ、植物が育つ。進捗も記録も、あなたのブラウザの中だけに。"
+>
+  <main class="container">
+    <header class="garden-header">
+      <p class="leaf-rule">あなたの庭</p>
+      <h1>歩いたぶんだけ、育っています。</h1>
+    </header>
+    <Garden client:load />
+  </main>
+</BaseLayout>
+
+<style>
+  .garden-header {
+    padding-block: var(--space-6) var(--space-4);
+  }
+</style>
+
+<style is:global>
+  .garden {
+    display: grid;
+    gap: var(--space-5);
+    max-width: var(--measure);
+    padding-bottom: var(--space-6);
+  }
+
+  .garden-course,
+  .garden-stats,
+  .garden-move {
+    border: 1px solid var(--c-line-strong);
+    border-radius: var(--radius-lg);
+    background: var(--c-paper);
+    padding: var(--space-4);
+  }
+
+  .garden h2 {
+    font-size: 1.15rem;
+    margin-bottom: var(--space-3);
+  }
+
+  .garden-bed {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding: var(--space-3);
+    background: var(--c-paper-2);
+    border-radius: var(--radius-md);
+    border-bottom: 3px solid color-mix(in srgb, var(--c-moss) 30%, transparent);
+  }
+
+  .garden-plant {
+    width: 2rem;
+    height: 2rem;
+    color: var(--c-line-strong);
+  }
+
+  .garden-plant.is-grown {
+    color: var(--c-moss);
+  }
+
+  .garden-count {
+    margin: var(--space-2) 0 0;
+    color: var(--c-ink-2);
+    font-size: 0.9rem;
+  }
+
+  .garden-note {
+    color: var(--c-ink-3);
+    font-size: 0.9rem;
+  }
+
+  .garden-actions {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+
+  .garden-message {
+    margin-top: var(--space-3);
+    color: var(--c-moss);
+    font-size: 0.92rem;
+  }
+</style>

@@ -1,0 +1,156 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const terms = [
+  {
+    word: 'プログラム',
+    yomi: 'program',
+    desc: '読み手（コンピュータ）に宛てて書く、曖昧さのない文。上から順に読まれ、書いたとおりのことが起きる。',
+  },
+  {
+    word: 'エラー',
+    yomi: 'error',
+    desc: '誠実な読み手からの返事。「ここまで読めた。ここで分からなくなった」という、世界でいちばん正確な読書感想文。失敗の印ではない。',
+  },
+  {
+    word: '変数',
+    yomi: 'variable',
+    desc: '値につけた名前（あだ名）。箱ではない。同じ値に複数の名前をつけられるし、名前は別の値に付け替えられる。',
+  },
+  {
+    word: 'ループ（くりかえし）',
+    yomi: 'loop',
+    desc: '「3回ノックして」という日本語の省略を、コンピュータに通じる形にしたもの。新しい概念ではなく、ことばに最初からある仕組みの形式化。',
+  },
+  {
+    word: '条件分岐（もしも）',
+    yomi: 'if',
+    desc: '「もし雨なら傘を持つ」の形式化。条件は「ほんとうか、うそか」で答えられる文でなければならない。',
+  },
+  {
+    word: '関数',
+    yomi: 'function',
+    desc: '辞書に新しいことばを載せること。一度「ゆでる」を定義すれば、毎回ゆで方を説明せずに済む。定義は一度、使用は何度でも。',
+  },
+  {
+    word: '引数',
+    yomi: 'argument',
+    desc: 'ことばが要求する「〜を」「〜で」の空欄。「ゆでる（卵を、7分）」の卵と7分。',
+  },
+  {
+    word: '式',
+    yomi: 'expression',
+    desc: '評価されると値になるもの。「1 + 2 × 3」は式で、評価すると 7 という値になる。文が「こと」なら、式は「もの」。',
+  },
+  {
+    word: '評価',
+    yomi: 'evaluation',
+    desc: '式を値にすること。実体は「構造の木を、深い葉っぱから順に畳む」操作。',
+  },
+  {
+    word: '構文木',
+    yomi: 'syntax tree',
+    desc: '文の構造を枝分かれで描いたもの。プログラムの中では { op, left, right } のような、ただのデータの入れ子。',
+  },
+  {
+    word: 'トークン',
+    yomi: 'token',
+    desc: 'ことばの粒。「言語の庭」を「言語/の/庭」と区切るように、コンピュータも文をまず粒に分けてから読む。',
+  },
+  {
+    word: '字句解析',
+    yomi: 'lexical analysis',
+    desc: '文字の列をトークン（粒）に切り分ける工程。言語処理系の3工程の1番目。',
+  },
+  {
+    word: '構文解析',
+    yomi: 'parsing',
+    desc: 'トークンの並びから構造の木を組み立てる工程。3工程の2番目。優先順位の正体は、この工程が作る木のかたち。',
+  },
+  {
+    word: 'インタプリタ',
+    yomi: 'interpreter',
+    desc: '文字列→粒→木→値、と進む翻訳の手順を書いたプログラム。その場で意味にする。書き出しておくならコンパイラ。',
+  },
+  {
+    word: '再帰',
+    yomi: 'recursion',
+    desc: '手順の中に自分自身が現れること。木の枝の先にまた木があるから、木を畳む手順には再帰が自然に現れる。目が回るのは普通。',
+  },
+  {
+    word: 'バグ',
+    yomi: 'bug',
+    desc: '意図と動作のずれ。文法のまちがいはコンピュータが教えてくれるが、意図とのずれはあなたにしか分からない。',
+  },
+];
+---
+
+<BaseLayout title="用語の庭" description="この庭のことばで書いた、小さな用語集。">
+  <main class="container">
+    <header class="gl-header">
+      <p class="leaf-rule">用語の庭</p>
+      <h1>ことばの、植物図鑑。</h1>
+      <p class="gl-lead">教科書の定義ではなく、この庭の声で書いてあります。</p>
+    </header>
+    <dl class="gl-list">
+      {
+        terms.map((t) => (
+          <div class="gl-item">
+            <dt>
+              {t.word} <span class="gl-yomi">{t.yomi}</span>
+            </dt>
+            <dd>{t.desc}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </main>
+</BaseLayout>
+
+<style>
+  .gl-header {
+    padding-block: var(--space-6) var(--space-4);
+    max-width: var(--measure);
+  }
+
+  .gl-lead {
+    color: var(--c-ink-2);
+    margin-top: var(--space-2);
+  }
+
+  .gl-list {
+    max-width: var(--measure);
+    margin: 0 0 var(--space-7);
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .gl-item {
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-md);
+    padding: var(--space-3) var(--space-4);
+    background: var(--c-paper);
+  }
+
+  .gl-item dt {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin-bottom: var(--space-1);
+  }
+
+  .gl-yomi {
+    font-family: var(--font-code);
+    font-size: 0.75rem;
+    color: var(--c-ink-3);
+    font-weight: 400;
+    margin-left: 0.5em;
+  }
+
+  .gl-item dd {
+    margin: 0;
+    color: var(--c-ink-2);
+    font-size: 0.95rem;
+    line-height: 1.95;
+  }
+</style>

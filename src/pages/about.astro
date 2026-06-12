@@ -1,0 +1,76 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { withBase } from '../utils/url';
+---
+
+<BaseLayout title="この庭について" description="言語の庭の考えかたと、書いている人について。">
+  <main class="container">
+    <article class="about prose">
+      <p class="leaf-rule">この庭について</p>
+      <h1>プログラミングは、ことばの営みです。</h1>
+
+      <p>
+        「数学が苦手だから」「文系だから」——プログラミングをあきらめる理由として、いちばんよく聞くことばです。この庭は、その理由を静かに取り下げてもらうために作られました。
+      </p>
+      <p>
+        プログラミング言語には、文法があり、名前があり、意味があります。それは数学の続きである前に、あなたが毎日使っている日本語と同じ「ことばの営み」です。日本語を読み書きできる人は、曖昧さのない文を書く練習を始める資格を、すでに持っています。
+      </p>
+
+      <h2>この庭の決めごと</h2>
+      <ul>
+        <li><strong>登録不要・広告なし・ずっと無料。</strong>進捗はあなたのブラウザにだけ保存され、この庭はあなたが誰かを知りません</li>
+        <li><strong>「変数は箱」のような、あとで壊れるたとえで教えません。</strong>最初から正しい絵を、ことばの感覚から描きます</li>
+        <li><strong>つまずく場所は、正直に予告します。</strong>つまずくのは、あなたのせいではありません</li>
+        <li><strong>ゴールは消費ではなく制作。</strong>最後は、自分のプログラミング言語を設計する側にまわってもらいます</li>
+      </ul>
+
+      <h2>書いている人</h2>
+      <p>
+        水島宏太（<a href="https://github.com/kmizu">kmizu</a>）。構文解析・PEGを専門とする博士（工学）。プログラミング言語を作ること・教えることを、ずっと続けてきました。この庭の教材とコードは、すべて<a
+          href="https://github.com/kmizu/cs-edu-site">GitHubで公開</a>されています。
+      </p>
+
+      <h2>なぜ無料なのか</h2>
+      <p>
+        よい教育の入口に、料金所があるべきではないと考えているからです。この庭は静的サイトとして動いていて、維持費がほとんどかかりません。技術がそれを可能にしたなら、使わない理由がありません。
+      </p>
+
+      <p class="about-cta">
+        <a class="btn btn-primary" href={withBase('/courses/kotoba/01/')}>最初のレッスンを歩く</a>
+      </p>
+    </article>
+  </main>
+</BaseLayout>
+
+<style>
+  .about {
+    padding-block: var(--space-6);
+  }
+
+  .about h1 {
+    margin-block: var(--space-2) var(--space-4);
+  }
+
+  .about h2 {
+    margin-top: var(--space-5);
+    margin-bottom: var(--space-3);
+  }
+
+  .about p,
+  .about li {
+    color: var(--c-ink-2);
+    line-height: 2.05;
+  }
+
+  .about ul {
+    padding-left: 1.3em;
+  }
+
+  .about li {
+    margin-bottom: 0.6em;
+  }
+
+  .about-cta {
+    margin-top: var(--space-5);
+  }
+</style>

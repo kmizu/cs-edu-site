@@ -12,6 +12,9 @@ function post(msg: WorkerToHost): void {
   self.postMessage(msg);
 }
 
+// 起動完了をホストに知らせる（ホストはこれを待ってからタイムアウトを計り始める）
+post({ type: 'ready' });
+
 self.onmessage = (e: MessageEvent<HostToWorker>) => {
   const { type, id, code } = e.data;
   if (type !== 'run') return;
