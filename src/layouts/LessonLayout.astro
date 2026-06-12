@@ -1,0 +1,369 @@
+---
+import LessonComplete from '../components/islands/LessonComplete';
+import type { CourseInfo } from '../data/courses';
+import { withBase } from '../utils/url';
+import BaseLayout from './BaseLayout.astro';
+
+interface LessonRef {
+  id: string;
+  slug: string;
+  title: string;
+  order: number;
+}
+
+interface Props {
+  lessonId: string;
+  title: string;
+  description: string;
+  course: CourseInfo;
+  order: number;
+  minutes: number;
+  seed?: string;
+  prev?: LessonRef;
+  next?: LessonRef;
+  all: LessonRef[];
+}
+
+const { lessonId, title, description, course, order, minutes, seed, prev, next, all } = Astro.props;
+
+const courseHref = withBase(`/courses/${course.key}/`);
+const lessonHref = (l: LessonRef) => withBase(`/courses/${course.key}/${l.slug}/`);
+---
+
+<BaseLayout title={title} description={description}>
+  <div class="lesson-shell container">
+    <aside class="lesson-side">
+      <p class="lesson-side-course">
+        <a href={courseHref}>コース{course.no}<br /><strong>{course.title}</strong></a>
+      </p>
+      <ol class="lesson-side-list">
+        {
+          all.map((l) => (
+            <li>
+              <a
+                href={lessonHref(l)}
+                data-lesson-id={l.id}
+                aria-current={l.id === lessonId ? 'page' : undefined}
+              >
+                <span class="lesson-side-no">{String(l.order).padStart(2, '0')}</span>
+                {l.title}
+              </a>
+            </li>
+          ))
+        }
+      </ol>
+    </aside>
+
+    <article class="lesson-main">
+      <header class="lesson-header">
+        <nav class="lesson-breadcrumb" aria-label="パンくず">
+          <a href={courseHref}>コース{course.no} {course.title}</a>
+          <span aria-hidden="true"> ／ </span>
+          <span>レッスン{order}</span>
+        </nav>
+        <h1>{title}</h1>
+        <p class="lesson-meta">よみもの＋手を動かす時間：およそ{minutes}分</p>
+      </header>
+
+      <div class="lesson-body prose-lesson">
+        <slot />
+      </div>
+
+      {
+        seed && (
+          <aside class="seed">
+            <p class="seed-label">ふしぎの種</p>
+            <p class="seed-text">{seed}</p>
+          </aside>
+        )
+      }
+
+      <LessonComplete
+        client:visible
+        lessonId={lessonId}
+        nextHref={next ? lessonHref(next) : undefined}
+        nextTitle={next?.title}
+      />
+
+      <nav class="lesson-pager" aria-label="前後のレッスン">
+        {
+          prev ? (
+            <a class="pager-link pager-prev" href={lessonHref(prev)}>
+              <span class="pager-dir">← まえ</span>
+              {prev.title}
+            </a>
+          ) : (
+            <span />
+          )
+        }
+        {
+          next ? (
+            <a class="pager-link pager-next" href={lessonHref(next)}>
+              <span class="pager-dir">つぎ →</span>
+              {next.title}
+            </a>
+          ) : (
+            <span />
+          )
+        }
+      </nav>
+    </article>
+  </div>
+</BaseLayout>
+
+<script>
+  // サイドバーに「植わった」マークをつける（localStorageから読むだけの軽い装飾）
+  try {
+    const raw = localStorage.getItem('niwa:progress:v1');
+    if (raw) {
+      const data = JSON.parse(raw) as { lessons?: Record<string, { done?: boolean }> };
+      for (const a of document.querySelectorAll<HTMLAnchorElement>('[data-lesson-id]')) {
+        const id = a.dataset.lessonId!;
+        if (data.lessons?.[id]?.done) a.classList.add('is-done');
+      }
+    }
+  } catch {
+    /* 進捗が読めなくてもページは普通に見られる */
+  }
+</script>
+
+<style>
+  .lesson-shell {
+    display: grid;
+    grid-template-columns: 15rem minmax(0, 1fr);
+    gap: var(--space-6);
+    padding-block: var(--space-5);
+  }
+
+  .lesson-side {
+    position: sticky;
+    top: 5rem;
+    align-self: start;
+    font-size: 0.88rem;
+  }
+
+  .lesson-side-course {
+    margin: 0 0 var(--space-3);
+    line-height: 1.6;
+  }
+
+  .lesson-side-course a {
+    text-decoration: none;
+    color: var(--c-ink-2);
+  }
+
+  .lesson-side-course strong {
+    font-family: var(--font-display);
+    color: var(--c-ink);
+  }
+
+  .lesson-side-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-left: 1px solid var(--c-line-strong);
+  }
+
+  .lesson-side-list a {
+    display: flex;
+    gap: 0.6em;
+    padding: 0.45em var(--space-2);
+    color: var(--c-ink-2);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    margin-left: -1px;
+    line-height: 1.5;
+  }
+
+  .lesson-side-list a:hover {
+    color: var(--c-ink);
+    background: var(--c-paper-2);
+  }
+
+  .lesson-side-list a[aria-current='page'] {
+    color: var(--c-moss);
+    border-left-color: var(--c-moss);
+    font-weight: 600;
+  }
+
+  .lesson-side-no {
+    font-family: var(--font-code);
+    font-size: 0.8em;
+    color: var(--c-ink-3);
+    padding-top: 0.2em;
+  }
+
+  .lesson-side-list a.is-done .lesson-side-no::after {
+    content: '✓';
+    color: var(--c-moss);
+    margin-left: 0.2em;
+  }
+
+  .lesson-main {
+    max-width: var(--measure);
+    min-width: 0;
+  }
+
+  .lesson-breadcrumb {
+    font-size: 0.85rem;
+    color: var(--c-ink-3);
+    margin-bottom: var(--space-3);
+  }
+
+  .lesson-breadcrumb a {
+    color: var(--c-ink-3);
+  }
+
+  .lesson-meta {
+    color: var(--c-ink-3);
+    font-size: 0.85rem;
+    margin-top: var(--space-2);
+  }
+
+  .lesson-header {
+    margin-bottom: var(--space-5);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--c-line);
+  }
+
+  .seed {
+    margin-block: var(--space-6) var(--space-4);
+    border: 1px solid color-mix(in srgb, var(--c-moss) 35%, transparent);
+    border-radius: var(--radius-md);
+    background: var(--c-moss-soft);
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .seed-label {
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    letter-spacing: var(--tracking-wide);
+    color: var(--c-moss);
+    margin: 0 0 var(--space-1);
+  }
+
+  .seed-label::before {
+    content: '✽ ';
+  }
+
+  .seed-text {
+    margin: 0;
+    line-height: 1.9;
+  }
+
+  .lesson-pager {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+    margin-top: var(--space-5);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--c-line);
+  }
+
+  .pager-link {
+    display: block;
+    text-decoration: none;
+    color: var(--c-ink);
+    border: 1px solid var(--c-line-strong);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    font-size: 0.92rem;
+    line-height: 1.6;
+    transition: border-color var(--dur-fast) ease;
+  }
+
+  .pager-link:hover {
+    border-color: var(--c-moss);
+  }
+
+  .pager-next {
+    text-align: right;
+  }
+
+  .pager-dir {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--c-ink-3);
+    margin-bottom: 0.2em;
+  }
+
+  @media (max-width: 860px) {
+    .lesson-shell {
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+
+    .lesson-side {
+      position: static;
+      order: 2;
+      border-top: 1px solid var(--c-line);
+      padding-top: var(--space-4);
+    }
+  }
+</style>
+
+<style is:global>
+  /* レッスン本文のタイポグラフィ */
+  .prose-lesson > h2 {
+    margin-top: var(--space-6);
+    margin-bottom: var(--space-3);
+    padding-left: var(--space-3);
+    border-left: 3px solid var(--c-moss);
+  }
+
+  .prose-lesson > h3 {
+    margin-top: var(--space-5);
+    margin-bottom: var(--space-2);
+  }
+
+  .prose-lesson p {
+    line-height: 2.05;
+  }
+
+  .prose-lesson ul,
+  .prose-lesson ol {
+    line-height: 2;
+    padding-left: 1.4em;
+  }
+
+  .lesson-complete {
+    margin-top: var(--space-6);
+    padding: var(--space-4);
+    border: 1px solid var(--c-line-strong);
+    border-radius: var(--radius-lg);
+    background: var(--c-paper-2);
+    text-align: center;
+  }
+
+  .lesson-complete.is-done {
+    border-color: color-mix(in srgb, var(--c-moss) 45%, transparent);
+    background: var(--c-moss-soft);
+  }
+
+  .lesson-complete-msg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    color: var(--c-moss);
+    font-weight: 600;
+    margin: 0 0 var(--space-3);
+  }
+
+  .lesson-complete-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+
+  .lesson-undone {
+    background: none;
+    border: none;
+    color: var(--c-ink-3);
+    font-size: 0.85rem;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+</style>

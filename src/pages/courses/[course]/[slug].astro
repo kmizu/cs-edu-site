@@ -1,0 +1,45 @@
+---
+import { getCollection, render } from 'astro:content';
+import LessonLayout from '../../../layouts/LessonLayout.astro';
+import { courseByKey } from '../../../data/courses';
+
+export async function getStaticPaths() {
+  const lessons = await getCollection('lessons');
+  return lessons.map((entry) => {
+    const [course, slug] = entry.id.split('/');
+    return { params: { course, slug }, props: { entry } };
+  });
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const course = courseByKey(entry.data.course)!;
+const siblings = (await getCollection('lessons', (e) => e.data.course === entry.data.course))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((e) => ({
+    id: e.id,
+    slug: e.id.split('/')[1]!,
+    title: e.data.title,
+    order: e.data.order,
+  }));
+
+const idx = siblings.findIndex((s) => s.id === entry.id);
+const prev = idx > 0 ? siblings[idx - 1] : undefined;
+const next = idx < siblings.length - 1 ? siblings[idx + 1] : undefined;
+---
+
+<LessonLayout
+  lessonId={entry.id}
+  title={entry.data.title}
+  description={entry.data.description}
+  course={course}
+  order={entry.data.order}
+  minutes={entry.data.minutes}
+  seed={entry.data.seed}
+  prev={prev}
+  next={next}
+  all={siblings}
+>
+  <Content />
+</LessonLayout>

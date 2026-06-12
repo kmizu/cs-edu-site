@@ -1,0 +1,183 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { COURSES, courseByKey } from '../../../data/courses';
+import { withBase } from '../../../utils/url';
+
+export function getStaticPaths() {
+  return COURSES.map((c) => ({ params: { course: c.key } }));
+}
+
+const { course: courseKey } = Astro.params;
+const course = courseByKey(courseKey!)!;
+
+const lessons = (await getCollection('lessons', (e) => e.data.course === course.key)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const comingSoon = course.total - lessons.length;
+---
+
+<BaseLayout title={course.title} description={course.description}>
+  <main class="container">
+    <header class="course-header">
+      <p class="leaf-rule">コース {course.no}</p>
+      <h1>{course.title}</h1>
+      <p class="course-tagline">{course.tagline}</p>
+      <p class="course-desc">{course.description}</p>
+    </header>
+
+    <ol class="lesson-list">
+      {
+        lessons.map((l) => (
+          <li>
+            <a
+              class="lesson-item"
+              href={withBase(`/courses/${course.key}/${l.id.split('/')[1]}/`)}
+              data-lesson-id={l.id}
+            >
+              <span class="lesson-item-no">{String(l.data.order).padStart(2, '0')}</span>
+              <span class="lesson-item-main">
+                <span class="lesson-item-title">{l.data.title}</span>
+                <span class="lesson-item-desc">{l.data.description}</span>
+              </span>
+              <svg class="lesson-item-plant" viewBox="0 0 24 24" aria-hidden="true">
+                <circle class="plant-dot" cx="12" cy="18" r="2.4" fill="currentColor" />
+                <path
+                  class="plant-sprout"
+                  d="M12 21 V10 M12 13 C12 8 7 7 4.5 8 C5.5 12 10 14 12 13 M12 10 C12 5 17 3.5 19.5 4.5 C18.5 9.5 14 11 12 10"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </a>
+          </li>
+        ))
+      }
+      {
+        comingSoon > 0 && (
+          <li class="lesson-item lesson-item-soon">
+            <span class="lesson-item-no">…</span>
+            <span class="lesson-item-main">
+              <span class="lesson-item-title">のこり {comingSoon} レッスンは、これから芽吹きます</span>
+            </span>
+          </li>
+        )
+      }
+    </ol>
+  </main>
+</BaseLayout>
+
+<script>
+  try {
+    const raw = localStorage.getItem('niwa:progress:v1');
+    if (raw) {
+      const data = JSON.parse(raw) as { lessons?: Record<string, { done?: boolean }> };
+      for (const a of document.querySelectorAll<HTMLAnchorElement>('[data-lesson-id]')) {
+        if (data.lessons?.[a.dataset.lessonId!]?.done) a.classList.add('is-done');
+      }
+    }
+  } catch {
+    /* noop */
+  }
+</script>
+
+<style>
+  .course-header {
+    padding-block: var(--space-6) var(--space-5);
+    max-width: var(--measure);
+  }
+
+  .course-tagline {
+    font-family: var(--font-display);
+    color: var(--c-ink-2);
+    font-size: 1.1rem;
+    margin-top: var(--space-3);
+  }
+
+  .course-desc {
+    color: var(--c-ink-2);
+    line-height: 2;
+  }
+
+  .lesson-list {
+    list-style: none;
+    margin: 0 0 var(--space-7);
+    padding: 0;
+    max-width: 50rem;
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .lesson-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    border: 1px solid var(--c-line-strong);
+    border-radius: var(--radius-md);
+    background: var(--c-paper);
+    padding: var(--space-3) var(--space-4);
+    text-decoration: none;
+    color: var(--c-ink);
+    transition:
+      transform var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) ease;
+  }
+
+  a.lesson-item:hover {
+    transform: translateX(4px);
+    border-color: var(--c-moss);
+  }
+
+  .lesson-item-no {
+    font-family: var(--font-code);
+    color: var(--c-ink-3);
+    font-size: 0.9rem;
+  }
+
+  .lesson-item-main {
+    display: grid;
+    gap: 0.15em;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .lesson-item-title {
+    font-weight: 600;
+  }
+
+  .lesson-item-desc {
+    font-size: 0.85rem;
+    color: var(--c-ink-3);
+    line-height: 1.7;
+  }
+
+  .lesson-item-plant {
+    width: 1.5rem;
+    height: 1.5rem;
+    flex-shrink: 0;
+    color: var(--c-line-strong);
+  }
+
+  .lesson-item-plant .plant-sprout {
+    display: none;
+  }
+
+  :global(.lesson-item.is-done) .lesson-item-plant {
+    color: var(--c-moss);
+  }
+
+  :global(.lesson-item.is-done) .lesson-item-plant .plant-sprout {
+    display: block;
+  }
+
+  :global(.lesson-item.is-done) .lesson-item-plant .plant-dot {
+    display: none;
+  }
+
+  .lesson-item-soon {
+    border-style: dashed;
+    opacity: 0.7;
+  }
+</style>

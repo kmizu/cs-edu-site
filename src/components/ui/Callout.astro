@@ -1,0 +1,91 @@
+---
+/**
+ * よりみち：修了に不要、でも読みたくなる脱線。折りたたみで置く。
+ * note / warn は本文中の補足。
+ */
+interface Props {
+  type?: 'yorimichi' | 'note' | 'warn';
+  title?: string;
+}
+
+const { type = 'note', title } = Astro.props;
+---
+
+{
+  type === 'yorimichi' ? (
+    <details class="callout callout-yorimichi">
+      <summary>
+        <span class="callout-mark">⟡</span> よりみち{title ? `：${title}` : ''}
+      </summary>
+      <div class="callout-body">
+        <slot />
+      </div>
+    </details>
+  ) : (
+    <aside class={`callout callout-${type}`}>
+      {title && <p class="callout-title">{title}</p>}
+      <div class="callout-body">
+        <slot />
+      </div>
+    </aside>
+  )
+}
+
+<style>
+  .callout {
+    border: 1px solid var(--c-line-strong);
+    border-radius: var(--radius-md);
+    margin-block: var(--space-4);
+    font-size: 0.95rem;
+  }
+
+  .callout-yorimichi {
+    background: var(--c-paper-2);
+    border-style: dashed;
+  }
+
+  .callout-yorimichi summary {
+    cursor: pointer;
+    padding: var(--space-3);
+    font-family: var(--font-display);
+    color: var(--c-moss);
+    letter-spacing: var(--tracking-display);
+    list-style: none;
+  }
+
+  .callout-yorimichi summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .callout-mark {
+    margin-right: 0.3em;
+  }
+
+  .callout-yorimichi[open] summary {
+    border-bottom: 1px dashed var(--c-line-strong);
+  }
+
+  .callout-note {
+    background: var(--c-moss-soft);
+    border-color: color-mix(in srgb, var(--c-moss) 30%, transparent);
+  }
+
+  .callout-warn {
+    background: var(--c-aka-soft);
+    border-color: color-mix(in srgb, var(--c-aka) 30%, transparent);
+  }
+
+  .callout-title {
+    font-weight: 700;
+    margin: var(--space-3) var(--space-3) 0;
+  }
+
+  .callout-body {
+    padding: var(--space-3);
+    line-height: 1.9;
+  }
+
+  .callout-body :global(p:last-child) {
+    margin-bottom: 0;
+  }
+</style>

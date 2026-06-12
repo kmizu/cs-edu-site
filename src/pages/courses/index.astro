@@ -1,0 +1,147 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { COURSES } from '../../data/courses';
+import { withBase } from '../../utils/url';
+
+const lessons = await getCollection('lessons');
+const counts = new Map(
+  COURSES.map((c) => [c.key, lessons.filter((l) => l.data.course === c.key).length]),
+);
+---
+
+<BaseLayout title="庭の地図" description="言語の庭のコース一覧。歩ける小道と、これから芽吹く区画。">
+  <main class="container">
+    <header class="map-header">
+      <p class="leaf-rule">庭の地図</p>
+      <h1>どの小道から歩いても、かまいません。</h1>
+      <p class="map-lead">
+        おすすめは、コース1の入口から。ここまでの歩みは、ブラウザがおぼえています。
+      </p>
+    </header>
+
+    <div class="map-courses">
+      {
+        COURSES.map((c) => (
+          <a class="map-course" href={withBase(`/courses/${c.key}/`)} data-course={c.key}>
+            <div class="map-course-head">
+              <span class="map-course-no">コース {c.no}</span>
+              <span class="map-course-count" data-course-count={c.key}>
+                公開中 {counts.get(c.key)} / {c.total} レッスン
+              </span>
+            </div>
+            <h2>{c.title}</h2>
+            <p class="map-course-tagline">{c.tagline}</p>
+            <p class="map-course-desc">{c.description}</p>
+            {c.prerequisite && <p class="map-course-pre">コース1のつづきとして歩くのがおすすめ</p>}
+          </a>
+        ))
+      }
+
+      <div class="map-course map-course-soon">
+        <span class="map-course-no">まだ芽が出ていない区画</span>
+        <h2>これから育つもの</h2>
+        <ul>
+          <li>正規表現 — もようをさがすことば</li>
+          <li>アルゴリズムのかたち</li>
+          <li>計算できる、とはどういうことか</li>
+          <li>型のはなし — まちがいを未然に防ぐ文法</li>
+        </ul>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .map-header {
+    padding-block: var(--space-6) var(--space-5);
+    max-width: var(--measure);
+  }
+
+  .map-lead {
+    color: var(--c-ink-2);
+    margin-top: var(--space-3);
+  }
+
+  .map-courses {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+    padding-bottom: var(--space-6);
+  }
+
+  .map-course {
+    display: block;
+    border: 1px solid var(--c-line-strong);
+    border-radius: var(--radius-lg);
+    background: var(--c-paper);
+    padding: var(--space-5);
+    text-decoration: none;
+    color: var(--c-ink);
+    box-shadow: var(--shadow-card);
+    transition:
+      transform var(--dur-fast) var(--ease-out),
+      box-shadow var(--dur-fast) var(--ease-out);
+  }
+
+  a.map-course:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lift);
+  }
+
+  .map-course-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+
+  .map-course-no {
+    font-family: var(--font-display);
+    letter-spacing: var(--tracking-wide);
+    font-size: 0.85rem;
+    color: var(--c-moss);
+  }
+
+  .map-course-count {
+    font-size: 0.8rem;
+    color: var(--c-ink-3);
+  }
+
+  .map-course h2 {
+    margin-block: var(--space-2);
+  }
+
+  .map-course-tagline {
+    font-family: var(--font-display);
+    color: var(--c-ink-2);
+    margin-bottom: var(--space-3);
+  }
+
+  .map-course-desc {
+    color: var(--c-ink-2);
+    font-size: 0.95rem;
+    line-height: 1.95;
+    margin: 0;
+  }
+
+  .map-course-pre {
+    margin: var(--space-3) 0 0;
+    font-size: 0.82rem;
+    color: var(--c-ink-3);
+  }
+
+  .map-course-soon {
+    border-style: dashed;
+    box-shadow: none;
+    opacity: 0.75;
+  }
+
+  .map-course-soon ul {
+    color: var(--c-ink-2);
+    line-height: 2.1;
+    margin: 0;
+    padding-left: 1.2em;
+  }
+</style>
