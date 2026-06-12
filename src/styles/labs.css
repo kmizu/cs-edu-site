@@ -184,3 +184,130 @@
   stroke-width: 1.5;
   color: var(--c-ink-2);
 }
+
+/* ---------- AlgoViz ---------- */
+
+.algoviz-edit {
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: 1fr auto;
+  align-items: end;
+}
+
+.algoviz-edit input {
+  width: 100%;
+  font-family: var(--font-code);
+  font-size: 16px;
+  color: var(--c-ink);
+  background: var(--c-editor-bg);
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-3);
+}
+
+.algoviz-goal input {
+  width: 6em;
+}
+
+.algoviz-board {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.algoviz-board-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.algoviz-algo {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  letter-spacing: var(--tracking-wide);
+  color: var(--c-moss);
+}
+
+.algoviz-count {
+  font-size: 0.85rem;
+  color: var(--c-ink-2);
+}
+
+.algoviz-count strong {
+  font-family: var(--font-code);
+  font-size: 1.05rem;
+  color: var(--c-aka);
+}
+
+.algoviz-cells {
+  display: flex;
+  gap: 4px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.algoviz-cell {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 3px;
+  min-width: 2.1em;
+  padding: 0.3em 0.2em;
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius-sm, 6px);
+  background: var(--c-paper-2);
+  transition: opacity 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.algoviz-bar {
+  display: block;
+  width: 0.8em;
+  background: color-mix(in srgb, var(--c-moss) 45%, transparent);
+  border-radius: 2px 2px 0 0;
+  transition: height 0.25s ease;
+}
+
+.algoviz-num {
+  font-family: var(--font-code);
+  font-size: 0.9rem;
+}
+
+.algoviz-cell.is-compare {
+  border-color: var(--c-aka);
+  background: color-mix(in srgb, var(--c-aka) 12%, var(--c-paper-2));
+}
+
+.algoviz-cell.is-compare .algoviz-bar {
+  background: var(--c-aka);
+}
+
+.algoviz-cell.is-found {
+  border-color: var(--c-moss);
+  background: var(--c-moss-soft);
+}
+
+.algoviz-cell.is-out {
+  opacity: 0.32;
+}
+
+.algoviz-note {
+  margin: 0;
+  min-height: 1.6em;
+  color: var(--c-ink-2);
+  font-size: 0.92rem;
+}
+
+.algoviz-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.algoviz-progress {
+  font-size: 0.85rem;
+  color: var(--c-ink-3);
+  margin-left: auto;
+}
